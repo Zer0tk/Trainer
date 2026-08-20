@@ -64,13 +64,11 @@
   * **Attributes**:
       - *PlaylistID*: INTEGER, PK, NOT NULL, UNIQUE
       - *UserID*: INTEGER, FK (REFERENCES Users), NOT NULL
-      - *PlaylistSongsID*: INTEGER, FK (REFERENCES Playlists), NOT NULL
       - *Title*: VARCHAR(100), NOT NULL
       - *CreationDate*: TIMESTAMPTZ, NOT NULL
   * **Constraints**:
       - *PK_Playlists*: PRIMARY KEY ( PlaylistID )
       - *FK_Playlists_Users*: FOREIGN KEY ( UserID ) REFERENCES Users ( UserID )
-      - *FK_Playlists_PlaylistSongs*: FOREIGN KEY ( PlaylistSongsID ) REFERENCES PlaylistSongs ( PlaylistSongsID )
 
 6\. __Table Name: PlaylistSongs__
   * **Description**: Хранит информацию о песнях плейлиста.
@@ -107,4 +105,4 @@
 
 # Part 3: ER-Диаграмма #
 
-![image](./images/db_scheme.png)
+![image](./images/db_schema.png)
