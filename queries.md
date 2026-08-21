@@ -153,32 +153,20 @@ FROM Orders;
 
 #### Запрос ####
 ```sql
-SELECT DISTINCT full_name, coutry, total_orders, total_amount
-FROM (
-    SELECT CONCAT(c.first_name, ' ', c.last_name) AS full_name, c.coutry,
-    COUNT(o.order_id) OVER ( PARTITION BY c.customer_id ) AS total_orders,
-    SUM(o.amount) OVER ( PARTITION BY c.customer_id ) AS total_amount
-    FROM Customers AS c
-    JOIN Orders AS o ON o.customer_id = c.customer_id
-    WHERE EXISTS (
-        SELECT 1
-        FROM Shippings as s
-        WHERE s.customer = c.customer_id AND s.status = 'Delivered'
-    )
+SELECT CONCAT(c.first_name, ' ', c.last_name) AS full_name, c.coutry,
+COUNT(o.order_id) AS total_orders,
+SUM(o.amount) AS total_amount
+FROM Customers AS c
+JOIN Orders AS o ON o.customer_id = c.customer_id
+WHERE EXISTS (
+    SELECT 1
+    FROM Shippings as s
+    WHERE s.customer = c.customer_id AND s.status = 'Delivered'
 )
-WHERE total_orders = 2;
+GROUP BY c.customer_id 
+HAVING total_orders >= 2;
 ```
 
-#### Пояснения ####
-1\. Условия
-
-Поскольку у нас есть условие по полю, полученному через aggregate function (`total_orders`), к которому мы не можем обратиться обычным способом (такое поле отсутствует в таблице, взятой из FROM), то обернем полученную через SELECT таблицу как subquery, которую возьмем через FROM (теперь у нас есть доступ к этому полю).
-
-Для второго условия нам потребуется взять отдельную таблицу из Shippings и проверить вхождение данных из исходного subquery через *EXISTS*.
-
-2\. Поле `full_name` получим при помощи склеивания строк (concatenate) *first_name* и *last_name* (между ними дополнительно добавим строку с пробелом) через соответствующую функцию *CONCAT*, принимающую в качестве аргументов эти строки.
-
-3\. Поскольку в результате получаем дублирование строк, то исключим повторения из основного запроса через *DISTINCT*.
 
 #### Скриншот ####
 ![image](/images/p7.png)
