@@ -15,11 +15,11 @@ WHERE Department = 'IT';
 
 UPDATE Employees
 SET Salary = 65000.00
-WHERE EmployeeID = 1;
+WHERE CONCAT(FirstName, ' ', LastName) = 'Alice Smith';
 
 
 DELETE FROM Employees
-WHERE EmployeeID = 5;
+WHERE CONCAT(FirstName, ' ', LastName) = 'Eve Davis';
 
 
 SELECT * FROM Employees;
