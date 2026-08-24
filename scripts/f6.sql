@@ -41,7 +41,9 @@ WITH new_employee AS (
 
 INSERT INTO EmployeeProjects
 (EmployeeID, ProjectID,  HoursWorked)
-SELECT id,   1,          80
+SELECT id,   (
+    SELECT ProjectID FROM Projects WHERE ProjectName = 'Website Redesign'
+), 80
 FROM new_employee;
 
 COMMIT;

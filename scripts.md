@@ -37,11 +37,11 @@ WHERE Department = 'IT';
 
 UPDATE Employees
 SET Salary = 65000.00
-WHERE EmployeeID = 1;
+WHERE CONCAT(FirstName, ' ', LastName) = 'Alice Smith';
 
 
 DELETE FROM Employees
-WHERE EmployeeID = 5;
+WHERE CONCAT(FirstName, ' ', LastName) = 'Eve Davis';
 
 
 SELECT * FROM Employees;
@@ -184,16 +184,19 @@ SELECT * FROM Employees;
 
 BEGIN;
 
-INSERT INTO Projects
-(ProjectName,           Budget,     StartDate,     EndDate     )
-VALUES
-('Cloud Migration',     125000.00,  '2023-02-20',  '2023-08-15');
+WITH new_project AS (
+    INSERT INTO Projects
+    (ProjectName,               Budget,     StartDate,     EndDate     )
+    VALUES
+    ('Cloud Migration',         125000.00,  '2023-02-20',  '2023-08-15')
+    RETURNING id;
+)
 
 INSERT INTO EmployeeProjects
 (EmployeeID, ProjectID,  HoursWorked)
 VALUES
-(2,          4,          140        ),
-(4,          4,          125        );
+(2,          (SELECT id FROM new_project),          140        ),
+(4,          (SELECT id FROM new_project),          125        );
 
 COMMIT;
 
@@ -333,7 +336,9 @@ WITH new_employee AS (
 
 INSERT INTO EmployeeProjects
 (EmployeeID, ProjectID,  HoursWorked)
-SELECT id,   1,          80
+SELECT id,   (
+    SELECT ProjectID FROM Projects WHERE ProjectName = 'Website Redesign'
+), 80
 FROM new_employee;
 
 COMMIT;
