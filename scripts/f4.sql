@@ -1,3 +1,16 @@
+UPDATE Employees
+SET Salary = Salary * 1.1
+WHERE Department = 'HR';
+
+
+SELECT * FROM Employees;
+
+
+UPDATE Employees
+SET Department = 'Senior IT'
+WHERE Salary > 70000.00;
+
+
 SELECT * FROM Employees;
 
 
