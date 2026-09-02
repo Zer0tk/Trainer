@@ -47,7 +47,6 @@
       - *PlaylistSK*: INTEGER, FK (REFERENCES DimPlaylists), NOT NULL
       - *SongSK*: INTEGER, FK (REFERENCES DimSongs), NOT NULL
       - *AddCount*: INTEGER, NOT NULL, DEFAULT 1
-      - *SongDurationSeconds*: INTEGER, NOT NULL
   * **Constraints**:
       - *PK_FactPlaylistAdd*: PRIMARY KEY ( PlaylistAddID )
       - *FK_FactPlaylistAdd_DimDate*: FOREIGN KEY ( DateKey ) REFERENCES DimDates ( DateID )
